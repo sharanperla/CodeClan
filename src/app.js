@@ -49,6 +49,30 @@ app.get("/test",(req,res)=>{
   res.send("Hello world")
 })
 
+
+app.patch("/user/:userId",async (req,res)=>{
+  const userId=req.params?.userId;
+  const data= req.body;
+
+
+  
+ try {
+  const ALLOWED_UPDATES=["photoUrl","gender","about","age","skills"];
+  const  isUpdateAllowed=Object.keys(data).every((k)=>ALLOWED_UPDATES.includes(k))
+  if(!isUpdateAllowed)
+  {
+    throw new Error("update not allowed")
+  }
+  const user=await User.findByIdAndUpdate({_id:userId},data,{
+    returnDocument:"after",
+    runValidators:true,
+  })
+  res.send("user upddated succesffully")
+ } catch (error) {
+  res.status(400).send("Update failed:"+error.message)
+ }
+
+})
 connectDB()
   .then(() => {
     console.log("connected to mongoDB");
