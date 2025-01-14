@@ -35,11 +35,18 @@ app.post("/signup",async (req,res)=>{
 
   const user=new User(req.body)
   await user.save();
+
   res.send("user added successfully")
+  
 })
 
-app.get("/feed",()=>{
-  
+app.post("/login",(req,res)=>{
+  console.log(req.body)
+})
+
+
+app.get("/test",(req,res)=>{
+  res.send("Hello world")
 })
 
 connectDB()
